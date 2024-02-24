@@ -1,3 +1,4 @@
+//go:build norace
 // +build norace
 
 package grpc_test
@@ -20,8 +21,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	reflectionv1 "github.com/cosmos/cosmos-sdk/client/grpc/reflection"
 	clienttx "github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	reflectionv2 "github.com/cosmos/cosmos-sdk/server/grpc/reflection/v2alpha1"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -37,7 +38,7 @@ import (
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app     *simapp.SimApp
+	app     *sedaapp.SedaApp
 	cfg     network.Config
 	network *network.Network
 	conn    *grpc.ClientConn
@@ -45,7 +46,7 @@ type IntegrationTestSuite struct {
 
 func (s *IntegrationTestSuite) SetupSuite() {
 	s.T().Log("setting up integration test suite")
-	s.app = simapp.Setup(false)
+	s.app = sedaapp.Setup(false)
 	s.cfg = network.DefaultConfig()
 	s.cfg.NumValidators = 1
 	s.network = network.New(s.T(), s.cfg)

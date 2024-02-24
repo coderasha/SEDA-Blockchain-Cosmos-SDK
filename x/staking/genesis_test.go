@@ -12,15 +12,15 @@ import (
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-func bootstrapGenesisTest(numAddrs int) (*simapp.SimApp, sdk.Context, []sdk.AccAddress) {
-	_, app, ctx := getBaseSimappWithCustomKeeper()
+func bootstrapGenesisTest(numAddrs int) (*sedaapp.SedaApp, sdk.Context, []sdk.AccAddress) {
+	_, app, ctx := getBaseSedaappWithCustomKeeper()
 
 	addrDels, _ := generateAddresses(app, ctx, numAddrs, sdk.NewInt(10000))
 	return app, ctx, addrDels
@@ -64,7 +64,7 @@ func TestInitGenesis(t *testing.T) {
 	log.Printf("%#v", len(validators))
 	// mint coins in the bonded pool representing the validators coins
 	require.NoError(t,
-		simapp.FundModuleAccount(
+		sedaapp.FundModuleAccount(
 			app.BankKeeper,
 			ctx,
 			types.BondedPoolName,
@@ -106,7 +106,7 @@ func TestInitGenesis(t *testing.T) {
 }
 
 func TestInitGenesis_PoolsBalanceMismatch(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.NewContext(false, tmproto.Header{})
 
 	consPub, err := codectypes.NewAnyWithValue(PKs[0])
@@ -182,7 +182,7 @@ func TestInitGenesisLargeValidatorSet(t *testing.T) {
 
 	// mint coins in the bonded pool representing the validators coins
 	require.NoError(t,
-		simapp.FundModuleAccount(
+		sedaapp.FundModuleAccount(
 			app.BankKeeper,
 			ctx,
 			types.BondedPoolName,

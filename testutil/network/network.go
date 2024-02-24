@@ -33,12 +33,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp/params"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/api"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/simapp/params"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -55,13 +55,13 @@ var lock = new(sync.Mutex)
 // creates an ABCI Application to provide to Tendermint.
 type AppConstructor = func(val Validator) servertypes.Application
 
-// NewAppConstructor returns a new simapp AppConstructor
+// NewAppConstructor returns a new sedaapp AppConstructor
 func NewAppConstructor(encodingCfg params.EncodingConfig) AppConstructor {
 	return func(val Validator) servertypes.Application {
-		return simapp.NewSimApp(
+		return sedaapp.NewSedaApp(
 			val.Ctx.Logger, dbm.NewMemDB(), nil, true, make(map[int64]bool), val.Ctx.Config.RootDir, 0,
 			encodingCfg,
-			simapp.EmptyAppOptions{},
+			sedaapp.EmptyAppOptions{},
 			baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
 			baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 		)
@@ -98,7 +98,7 @@ type Config struct {
 // DefaultConfig returns a sane default configuration suitable for nearly all
 // testing requirements.
 func DefaultConfig() Config {
-	encCfg := simapp.MakeTestEncodingConfig()
+	encCfg := sedaapp.MakeTestEncodingConfig()
 
 	return Config{
 		Codec:             encCfg.Marshaler,
@@ -107,7 +107,7 @@ func DefaultConfig() Config {
 		InterfaceRegistry: encCfg.InterfaceRegistry,
 		AccountRetriever:  authtypes.AccountRetriever{},
 		AppConstructor:    NewAppConstructor(encCfg),
-		GenesisState:      simapp.ModuleBasics.DefaultGenesis(encCfg.Marshaler),
+		GenesisState:      sedaapp.ModuleBasics.DefaultGenesis(encCfg.Marshaler),
 		TimeoutCommit:     2 * time.Second,
 		ChainID:           "chain-" + tmrand.NewRand().Str(6),
 		NumValidators:     4,
@@ -124,7 +124,7 @@ func DefaultConfig() Config {
 }
 
 type (
-	// Network defines a local in-process testing network using SimApp. It can be
+	// Network defines a local in-process testing network using SedaApp. It can be
 	// configured to start any number of validators, each with its own RPC and API
 	// clients. Typically, this test network would be used in client and integration
 	// testing where user input is expected.
@@ -250,8 +250,8 @@ func New(t *testing.T, cfg Config) *Network {
 		ctx.Logger = logger
 
 		nodeDirName := fmt.Sprintf("node%d", i)
-		nodeDir := filepath.Join(network.BaseDir, nodeDirName, "simd")
-		clientDir := filepath.Join(network.BaseDir, nodeDirName, "simcli")
+		nodeDir := filepath.Join(network.BaseDir, nodeDirName, "sedad")
+		clientDir := filepath.Join(network.BaseDir, nodeDirName, "sedacli")
 		gentxsDir := filepath.Join(network.BaseDir, "gentxs")
 
 		require.NoError(t, os.MkdirAll(filepath.Join(nodeDir, "config"), 0755))

@@ -16,7 +16,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
+
+	// "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v7/testing/sedaapp"
+
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -27,7 +30,7 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
 
-var blockMaxGas = uint64(simapp.DefaultConsensusParams.Block.MaxGas)
+var blockMaxGas = uint64(sedaapp.DefaultConsensusParams.Block.MaxGas)
 
 func TestBaseApp_BlockGas(t *testing.T) {
 	testcases := []struct {
@@ -45,7 +48,7 @@ func TestBaseApp_BlockGas(t *testing.T) {
 	}
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
-			var app *simapp.SimApp
+			var app *sedaapp.SedaApp
 			routerOpt := func(bapp *baseapp.BaseApp) {
 				route := (&testdata.TestMsg{}).Route()
 				bapp.Router().AddRoute(sdk.NewRoute(route, func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
@@ -61,18 +64,18 @@ func TestBaseApp_BlockGas(t *testing.T) {
 					return &sdk.Result{}, nil
 				}))
 			}
-			encCfg := simapp.MakeTestEncodingConfig()
+			encCfg := sedaapp.MakeTestEncodingConfig()
 			encCfg.Amino.RegisterConcrete(&testdata.TestMsg{}, "testdata.TestMsg", nil)
 			encCfg.InterfaceRegistry.RegisterImplementations((*sdk.Msg)(nil),
 				&testdata.TestMsg{},
 			)
-			app = simapp.NewSimApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, map[int64]bool{}, "", 0, encCfg, simapp.EmptyAppOptions{}, routerOpt)
-			genState := simapp.NewDefaultGenesisState(encCfg.Marshaler)
+			app = sedaapp.NewSedaApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, map[int64]bool{}, "", 0, encCfg, sedaapp.EmptyAppOptions{}, routerOpt)
+			genState := sedaapp.NewDefaultGenesisState(encCfg.Marshaler)
 			stateBytes, err := json.MarshalIndent(genState, "", " ")
 			require.NoError(t, err)
 			app.InitChain(abci.RequestInitChain{
 				Validators:      []abci.ValidatorUpdate{},
-				ConsensusParams: simapp.DefaultConsensusParams,
+				ConsensusParams: sedaapp.DefaultConsensusParams,
 				AppStateBytes:   stateBytes,
 			})
 

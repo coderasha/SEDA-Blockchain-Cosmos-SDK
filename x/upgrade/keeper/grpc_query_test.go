@@ -9,7 +9,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/upgrade/types"
@@ -18,13 +18,13 @@ import (
 type UpgradeTestSuite struct {
 	suite.Suite
 
-	app         *simapp.SimApp
+	app         *sedaapp.SedaApp
 	ctx         sdk.Context
 	queryClient types.QueryClient
 }
 
 func (suite *UpgradeTestSuite) SetupTest() {
-	suite.app = simapp.Setup(false)
+	suite.app = sedaapp.Setup(false)
 	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{})
 
 	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.app.InterfaceRegistry())

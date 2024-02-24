@@ -1,14 +1,14 @@
 package keeper_test
 
 import (
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/distribution/types"
 )
 
 var (
-	PKS = simapp.CreateTestPubKeys(5)
+	PKS = sedaapp.CreateTestPubKeys(5)
 
 	valConsPk1 = PKS[0]
 	valConsPk2 = PKS[1]

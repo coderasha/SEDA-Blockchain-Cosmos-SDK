@@ -8,7 +8,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -22,14 +22,14 @@ type CapabilityTestSuite struct {
 
 	cdc    codec.Codec
 	ctx    sdk.Context
-	app    *simapp.SimApp
+	app    *sedaapp.SedaApp
 	keeper *keeper.Keeper
 	module module.AppModule
 }
 
 func (suite *CapabilityTestSuite) SetupTest() {
 	checkTx := false
-	app := simapp.Setup(checkTx)
+	app := sedaapp.Setup(checkTx)
 	cdc := app.AppCodec()
 
 	// create new keeper so we can define custom scoping before init and seal

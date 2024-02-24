@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
@@ -16,7 +16,7 @@ import (
 )
 
 func TestSupplyMigration(t *testing.T) {
-	encCfg := simapp.MakeTestEncodingConfig()
+	encCfg := sedaapp.MakeTestEncodingConfig()
 	bankKey := sdk.NewKVStoreKey("bank")
 	ctx := testutil.DefaultContext(bankKey, sdk.NewTransientStoreKey("transient_test"))
 	store := ctx.KVStore(bankKey)
@@ -65,7 +65,7 @@ func TestSupplyMigration(t *testing.T) {
 }
 
 func TestBalanceKeysMigration(t *testing.T) {
-	encCfg := simapp.MakeTestEncodingConfig()
+	encCfg := sedaapp.MakeTestEncodingConfig()
 	bankKey := sdk.NewKVStoreKey("bank")
 	ctx := testutil.DefaultContext(bankKey, sdk.NewTransientStoreKey("transient_test"))
 	store := ctx.KVStore(bankKey)

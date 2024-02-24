@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
@@ -22,8 +22,8 @@ var (
 	dummyRouteWhichFails  = types.NewInvarRoute(testModuleName, "which-fails", func(_ sdk.Context) (string, bool) { return "whoops", true })
 )
 
-func createTestApp() (*simapp.SimApp, sdk.Context, []sdk.AccAddress) {
-	app := simapp.Setup(false)
+func createTestApp() (*sedaapp.SedaApp, sdk.Context, []sdk.AccAddress) {
+	app := sedaapp.Setup(false)
 	ctx := app.NewContext(false, tmproto.Header{})
 
 	constantFee := sdk.NewInt64Coin(sdk.DefaultBondDenom, 10)
@@ -37,7 +37,7 @@ func createTestApp() (*simapp.SimApp, sdk.Context, []sdk.AccAddress) {
 	feePool.CommunityPool = sdk.NewDecCoinsFromCoins(sdk.NewCoins(constantFee)...)
 	app.DistrKeeper.SetFeePool(ctx, feePool)
 
-	addrs := simapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(10000))
+	addrs := sedaapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(10000))
 
 	return app, ctx, addrs
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
@@ -16,12 +16,12 @@ type HandlerTestSuite struct {
 	suite.Suite
 
 	handler sdk.Handler
-	app     *simapp.SimApp
+	app     *sedaapp.SedaApp
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
 	checkTx := false
-	app := simapp.Setup(checkTx)
+	app := sedaapp.Setup(checkTx)
 
 	suite.handler = vesting.NewHandler(app.AccountKeeper, app.BankKeeper)
 	suite.app = app
@@ -37,7 +37,7 @@ func (suite *HandlerTestSuite) TestMsgCreateVestingAccount() {
 
 	acc1 := suite.app.AccountKeeper.NewAccountWithAddress(ctx, addr1)
 	suite.app.AccountKeeper.SetAccount(ctx, acc1)
-	suite.Require().NoError(simapp.FundAccount(suite.app.BankKeeper, ctx, addr1, balances))
+	suite.Require().NoError(sedaapp.FundAccount(suite.app.BankKeeper, ctx, addr1, balances))
 
 	testCases := []struct {
 		name      string

@@ -65,7 +65,7 @@ will provide two concrete implementations of the `Marshaler` interface: `AminoCo
 - `AminoCodec`: Uses Amino for both binary and JSON encoding.
 - `ProtoCodec`: Uses Protobuf for both binary and JSON encoding.
 
-Modules will use whichever codec that is instantiated in the app. By default, the SDK's `simapp`
+Modules will use whichever codec that is instantiated in the app. By default, the SDK's `sedaapp`
 instantiates a `ProtoCodec` as the concrete implementation of `Marshaler`, inside the `MakeTestEncodingConfig`
 function. This can be easily overwritten by app developers if they so desire.
 

@@ -7,8 +7,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	genutiltest "github.com/cosmos/cosmos-sdk/x/genutil/client/testutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -19,12 +19,12 @@ import (
 
 func Test_TestnetCmd(t *testing.T) {
 	home := t.TempDir()
-	encodingConfig := simapp.MakeTestEncodingConfig()
+	encodingConfig := sedaapp.MakeTestEncodingConfig()
 	logger := log.NewNopLogger()
 	cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
 	require.NoError(t, err)
 
-	err = genutiltest.ExecInitCmd(simapp.ModuleBasics, home, encodingConfig.Marshaler)
+	err = genutiltest.ExecInitCmd(sedaapp.ModuleBasics, home, encodingConfig.Marshaler)
 	require.NoError(t, err)
 
 	serverCtx := server.NewContext(viper.New(), cfg, logger)
@@ -36,7 +36,7 @@ func Test_TestnetCmd(t *testing.T) {
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, server.ServerContextKey, serverCtx)
 	ctx = context.WithValue(ctx, client.ClientContextKey, &clientCtx)
-	cmd := testnetCmd(simapp.ModuleBasics, banktypes.GenesisBalancesIterator{})
+	cmd := testnetCmd(sedaapp.ModuleBasics, banktypes.GenesisBalancesIterator{})
 	cmd.SetArgs([]string{fmt.Sprintf("--%s=test", flags.FlagKeyringBackend), fmt.Sprintf("--output-dir=%s", home)})
 	err = cmd.ExecuteContext(ctx)
 	require.NoError(t, err)

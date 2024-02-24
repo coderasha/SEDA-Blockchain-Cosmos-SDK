@@ -1,11 +1,11 @@
 package types_test
 
 import (
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 )
 
 var (
-	app                   = simapp.Setup(false)
-	ecdc                  = simapp.MakeTestEncodingConfig()
+	app                   = sedaapp.Setup(false)
+	ecdc                  = sedaapp.MakeTestEncodingConfig()
 	appCodec, legacyAmino = ecdc.Marshaler, ecdc.Amino
 )

@@ -7,7 +7,7 @@ import (
 
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
@@ -18,13 +18,13 @@ import (
 type HandlerTestSuite struct {
 	suite.Suite
 
-	app        *simapp.SimApp
+	app        *sedaapp.SedaApp
 	ctx        sdk.Context
 	govHandler govtypes.Handler
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
-	suite.app = simapp.Setup(false)
+	suite.app = sedaapp.Setup(false)
 	suite.ctx = suite.app.BaseApp.NewContext(false, tmproto.Header{})
 	suite.govHandler = params.NewParamChangeProposalHandler(suite.app.ParamsKeeper)
 }

@@ -1,11 +1,11 @@
-package simapp_test
+package sedaapp_test
 
 import (
 	"testing"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -24,26 +24,26 @@ func TestSimGenesisAccountValidate(t *testing.T) {
 
 	testCases := []struct {
 		name    string
-		sga     simapp.SimGenesisAccount
+		sga     sedaapp.SedaGenesisAccount
 		wantErr bool
 	}{
 		{
 			"valid basic account",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount: baseAcc,
 			},
 			false,
 		},
 		{
 			"invalid basic account with mismatching address/pubkey",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount: authtypes.NewBaseAccount(addr, secp256k1.GenPrivKey().PubKey(), 0, 0),
 			},
 			true,
 		},
 		{
 			"valid basic account with module name",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount: authtypes.NewBaseAccount(sdk.AccAddress(crypto.AddressHash([]byte("testmod"))), nil, 0, 0),
 				ModuleName:  "testmod",
 			},
@@ -51,7 +51,7 @@ func TestSimGenesisAccountValidate(t *testing.T) {
 		},
 		{
 			"valid basic account with invalid module name/pubkey pair",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount: baseAcc,
 				ModuleName:  "testmod",
 			},
@@ -59,7 +59,7 @@ func TestSimGenesisAccountValidate(t *testing.T) {
 		},
 		{
 			"valid basic account with valid vesting attributes",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount:     baseAcc,
 				OriginalVesting: coins,
 				StartTime:       vestingStart.Unix(),
@@ -69,7 +69,7 @@ func TestSimGenesisAccountValidate(t *testing.T) {
 		},
 		{
 			"valid basic account with invalid vesting end time",
-			simapp.SimGenesisAccount{
+			sedaapp.SedaGenesisAccount{
 				BaseAccount:     baseAcc,
 				OriginalVesting: coins,
 				StartTime:       vestingStart.Add(2 * time.Hour).Unix(),

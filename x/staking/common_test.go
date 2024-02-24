@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -30,13 +30,13 @@ var (
 
 	commissionRates = types.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
 
-	PKs = simapp.CreateTestPubKeys(500)
+	PKs = sedaapp.CreateTestPubKeys(500)
 )
 
-// getBaseSimappWithCustomKeeper Returns a simapp with custom StakingKeeper
+// getBaseSedaappWithCustomKeeper Returns a sedaapp with custom StakingKeeper
 // to avoid messing with the hooks.
-func getBaseSimappWithCustomKeeper() (*codec.LegacyAmino, *simapp.SimApp, sdk.Context) {
-	app := simapp.Setup(false)
+func getBaseSedaappWithCustomKeeper() (*codec.LegacyAmino, *sedaapp.SedaApp, sdk.Context) {
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	appCodec := app.AppCodec()
@@ -54,9 +54,9 @@ func getBaseSimappWithCustomKeeper() (*codec.LegacyAmino, *simapp.SimApp, sdk.Co
 }
 
 // generateAddresses generates numAddrs of normal AccAddrs and ValAddrs
-func generateAddresses(app *simapp.SimApp, ctx sdk.Context, numAddrs int, accAmount sdk.Int) ([]sdk.AccAddress, []sdk.ValAddress) {
-	addrDels := simapp.AddTestAddrsIncremental(app, ctx, numAddrs, accAmount)
-	addrVals := simapp.ConvertAddrsToValAddrs(addrDels)
+func generateAddresses(app *sedaapp.SedaApp, ctx sdk.Context, numAddrs int, accAmount sdk.Int) ([]sdk.AccAddress, []sdk.ValAddress) {
+	addrDels := sedaapp.AddTestAddrsIncremental(app, ctx, numAddrs, accAmount)
+	addrVals := sedaapp.ConvertAddrsToValAddrs(addrDels)
 
 	return addrDels, addrVals
 }

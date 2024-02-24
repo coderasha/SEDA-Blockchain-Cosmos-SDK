@@ -9,8 +9,8 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
+	sedaappparams "github.com/cosmos/cosmos-sdk/sedaapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
@@ -42,11 +42,11 @@ func TestWeightedOperations(t *testing.T) {
 		weight     int
 		opMsgRoute string
 		opMsgName  string
-	}{{simappparams.DefaultWeightMsgCreateValidator, types.ModuleName, types.TypeMsgCreateValidator},
-		{simappparams.DefaultWeightMsgEditValidator, types.ModuleName, types.TypeMsgEditValidator},
-		{simappparams.DefaultWeightMsgDelegate, types.ModuleName, types.TypeMsgDelegate},
-		{simappparams.DefaultWeightMsgUndelegate, types.ModuleName, types.TypeMsgUndelegate},
-		{simappparams.DefaultWeightMsgBeginRedelegate, types.ModuleName, types.TypeMsgBeginRedelegate},
+	}{{sedaappparams.DefaultWeightMsgCreateValidator, types.ModuleName, types.TypeMsgCreateValidator},
+		{sedaappparams.DefaultWeightMsgEditValidator, types.ModuleName, types.TypeMsgEditValidator},
+		{sedaappparams.DefaultWeightMsgDelegate, types.ModuleName, types.TypeMsgDelegate},
+		{sedaappparams.DefaultWeightMsgUndelegate, types.ModuleName, types.TypeMsgUndelegate},
+		{sedaappparams.DefaultWeightMsgBeginRedelegate, types.ModuleName, types.TypeMsgBeginRedelegate},
 	}
 
 	for i, w := range weightesOps {
@@ -262,9 +262,9 @@ func TestSimulateMsgBeginRedelegate(t *testing.T) {
 }
 
 // returns context and an app with updated mint keeper
-func createTestApp(isCheckTx bool) (*simapp.SimApp, sdk.Context) {
+func createTestApp(isCheckTx bool) (*sedaapp.SedaApp, sdk.Context) {
 	// sdk.PowerReduction = sdk.NewIntFromBigInt(new(big.Int).Exp(big.NewInt(10), big.NewInt(18), nil))
-	app := simapp.Setup(isCheckTx)
+	app := sedaapp.Setup(isCheckTx)
 
 	ctx := app.BaseApp.NewContext(isCheckTx, tmproto.Header{})
 	app.MintKeeper.SetParams(ctx, minttypes.DefaultParams())
@@ -273,7 +273,7 @@ func createTestApp(isCheckTx bool) (*simapp.SimApp, sdk.Context) {
 	return app, ctx
 }
 
-func getTestingAccounts(t *testing.T, r *rand.Rand, app *simapp.SimApp, ctx sdk.Context, n int) []simtypes.Account {
+func getTestingAccounts(t *testing.T, r *rand.Rand, app *sedaapp.SedaApp, ctx sdk.Context, n int) []simtypes.Account {
 	accounts := simtypes.RandomAccounts(r, n)
 
 	initAmt := app.StakingKeeper.TokensFromConsensusPower(ctx, 200)
@@ -283,23 +283,23 @@ func getTestingAccounts(t *testing.T, r *rand.Rand, app *simapp.SimApp, ctx sdk.
 	for _, account := range accounts {
 		acc := app.AccountKeeper.NewAccountWithAddress(ctx, account.Address)
 		app.AccountKeeper.SetAccount(ctx, acc)
-		require.NoError(t, simapp.FundAccount(app.BankKeeper, ctx, account.Address, initCoins))
+		require.NoError(t, sedaapp.FundAccount(app.BankKeeper, ctx, account.Address, initCoins))
 	}
 
 	return accounts
 }
 
-func getTestingValidator0(t *testing.T, app *simapp.SimApp, ctx sdk.Context, accounts []simtypes.Account) types.Validator {
+func getTestingValidator0(t *testing.T, app *sedaapp.SedaApp, ctx sdk.Context, accounts []simtypes.Account) types.Validator {
 	commission0 := types.NewCommission(sdk.ZeroDec(), sdk.OneDec(), sdk.OneDec())
 	return getTestingValidator(t, app, ctx, accounts, commission0, 0)
 }
 
-func getTestingValidator1(t *testing.T, app *simapp.SimApp, ctx sdk.Context, accounts []simtypes.Account) types.Validator {
+func getTestingValidator1(t *testing.T, app *sedaapp.SedaApp, ctx sdk.Context, accounts []simtypes.Account) types.Validator {
 	commission1 := types.NewCommission(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
 	return getTestingValidator(t, app, ctx, accounts, commission1, 1)
 }
 
-func getTestingValidator(t *testing.T, app *simapp.SimApp, ctx sdk.Context, accounts []simtypes.Account, commission types.Commission, n int) types.Validator {
+func getTestingValidator(t *testing.T, app *sedaapp.SedaApp, ctx sdk.Context, accounts []simtypes.Account, commission types.Commission, n int) types.Validator {
 	account := accounts[n]
 	valPubKey := account.PubKey
 	valAddr := sdk.ValAddress(account.PubKey.Address().Bytes())
@@ -315,7 +315,7 @@ func getTestingValidator(t *testing.T, app *simapp.SimApp, ctx sdk.Context, acco
 	return validator
 }
 
-func setupValidatorRewards(app *simapp.SimApp, ctx sdk.Context, valAddress sdk.ValAddress) {
+func setupValidatorRewards(app *sedaapp.SedaApp, ctx sdk.Context, valAddress sdk.ValAddress) {
 	decCoins := sdk.DecCoins{sdk.NewDecCoinFromDec(sdk.DefaultBondDenom, sdk.OneDec())}
 	historicalRewards := distrtypes.NewValidatorHistoricalRewards(decCoins, 2)
 	app.DistrKeeper.SetValidatorHistoricalRewards(ctx, valAddress, 2, historicalRewards)

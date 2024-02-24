@@ -5,13 +5,15 @@ import (
 	"testing"
 	"time"
 
+	// "cosmossdk.io/sedaapp"
+
 	"github.com/stretchr/testify/suite"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
+	sedaappparams "github.com/cosmos/cosmos-sdk/sedaapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
@@ -22,12 +24,12 @@ type SimTestSuite struct {
 	suite.Suite
 
 	ctx sdk.Context
-	app *simapp.SimApp
+	app *sedaapp.SedaApp
 }
 
 func (suite *SimTestSuite) SetupTest() {
 	checkTx := false
-	app := simapp.Setup(checkTx)
+	app := sedaapp.Setup(checkTx)
 	suite.app = app
 	suite.ctx = app.BaseApp.NewContext(checkTx, tmproto.Header{
 		Time: time.Now(),
@@ -43,7 +45,7 @@ func (suite *SimTestSuite) getTestingAccounts(r *rand.Rand, n int) []simtypes.Ac
 
 	// add coins to the accounts
 	for _, account := range accounts {
-		err := simapp.FundAccount(suite.app.BankKeeper, suite.ctx, account.Address, initCoins)
+		err := sedaapp.FundAccount(suite.app.BankKeeper, suite.ctx, account.Address, initCoins)
 		suite.Require().NoError(err)
 	}
 
@@ -74,12 +76,12 @@ func (suite *SimTestSuite) TestWeightedOperations() {
 		opMsgName  string
 	}{
 		{
-			simappparams.DefaultWeightGrantAllowance,
+			sedaappparams.DefaultWeightGrantAllowance,
 			feegrant.ModuleName,
 			simulation.TypeMsgGrantAllowance,
 		},
 		{
-			simappparams.DefaultWeightRevokeAllowance,
+			sedaappparams.DefaultWeightRevokeAllowance,
 			feegrant.ModuleName,
 			simulation.TypeMsgRevokeAllowance,
 		},

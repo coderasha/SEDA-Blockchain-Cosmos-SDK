@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
+	sedaappparams "github.com/cosmos/cosmos-sdk/sedaapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
@@ -36,13 +36,13 @@ func WeightedOperations(
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgGrantAllowance, &weightMsgGrantAllowance, nil,
 		func(_ *rand.Rand) {
-			weightMsgGrantAllowance = simappparams.DefaultWeightGrantAllowance
+			weightMsgGrantAllowance = sedaappparams.DefaultWeightGrantAllowance
 		},
 	)
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgRevokeAllowance, &weightMsgRevokeAllowance, nil,
 		func(_ *rand.Rand) {
-			weightMsgRevokeAllowance = simappparams.DefaultWeightRevokeAllowance
+			weightMsgRevokeAllowance = sedaappparams.DefaultWeightRevokeAllowance
 		},
 	)
 
@@ -93,7 +93,7 @@ func SimulateMsgGrantAllowance(ak feegrant.AccountKeeper, bk feegrant.BankKeeper
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:           sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         TypeMsgGrantAllowance,
@@ -151,7 +151,7 @@ func SimulateMsgRevokeAllowance(ak feegrant.AccountKeeper, bk feegrant.BankKeepe
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:           sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             &msg,
 			MsgType:         TypeMsgRevokeAllowance,

@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
@@ -15,7 +15,7 @@ import (
 )
 
 func TestRandomizedGenState(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 
 	s := rand.NewSource(1)
 	r := rand.New(s)

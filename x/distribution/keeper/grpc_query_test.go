@@ -9,7 +9,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/cosmos/cosmos-sdk/x/distribution/types"
@@ -21,7 +21,7 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	app         *simapp.SimApp
+	app         *sedaapp.SedaApp
 	ctx         sdk.Context
 	queryClient types.QueryClient
 	addrs       []sdk.AccAddress
@@ -29,7 +29,7 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	queryHelper := baseapp.NewQueryServerTestHelper(ctx, app.InterfaceRegistry())
@@ -40,8 +40,8 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.ctx = ctx
 	suite.queryClient = queryClient
 
-	suite.addrs = simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
-	suite.valAddrs = simapp.ConvertAddrsToValAddrs(suite.addrs)
+	suite.addrs = sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
+	suite.valAddrs = sedaapp.ConvertAddrsToValAddrs(suite.addrs)
 }
 
 func (suite *KeeperTestSuite) TestGRPCParams() {
@@ -623,7 +623,7 @@ func (suite *KeeperTestSuite) TestGRPCCommunityPool() {
 			"valid request",
 			func() {
 				amount := sdk.NewCoins(sdk.NewInt64Coin("stake", 100))
-				suite.Require().NoError(simapp.FundAccount(app.BankKeeper, ctx, addrs[0], amount))
+				suite.Require().NoError(sedaapp.FundAccount(app.BankKeeper, ctx, addrs[0], amount))
 
 				err := app.DistrKeeper.FundCommunityPool(ctx, amount, addrs[0])
 				suite.Require().Nil(err)

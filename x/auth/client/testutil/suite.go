@@ -20,7 +20,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	kmultisig "github.com/cosmos/cosmos-sdk/crypto/keys/multisig"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
@@ -118,7 +118,7 @@ func (s *IntegrationTestSuite) TestCLISignBatch() {
 	s.Require().NoError(err)
 
 	outputFile := testutil.WriteToNewTempFile(s.T(), strings.Repeat(generatedStd.String(), 3))
-	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 
 	// sign-batch file - offline is set but account-number and sequence are not
 	_, err = TxSignBatchExec(val.ClientCtx, val.Address, outputFile.Name(), fmt.Sprintf("--%s=%s", flags.FlagChainID, val.ClientCtx.ChainID), "--offline")
@@ -572,7 +572,7 @@ func (s *IntegrationTestSuite) TestCLISendGenerateSignAndBroadcast() {
 	s.Require().EqualError(err, "required flag(s) \"account-number\", \"sequence\" not set")
 
 	// But works offline if we set account number and sequence
-	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 	_, err = TxSignExec(val1.ClientCtx, val1.Address, unsignedTxFile.Name(), "--offline", "--account-number", "1", "--sequence", "1")
 	s.Require().NoError(err)
 
@@ -677,7 +677,7 @@ func (s *IntegrationTestSuite) TestCLIMultisignInsufficientCosigners() {
 	multiGeneratedTxFile := testutil.WriteToNewTempFile(s.T(), multiGeneratedTx.String())
 
 	// Multisign, sign with one signature
-	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 	account1Signature, err := TxSignExec(val1.ClientCtx, account1.GetAddress(), multiGeneratedTxFile.Name(), "--multisig", multisigInfo.GetAddress().String())
 	s.Require().NoError(err)
 
@@ -783,7 +783,7 @@ func (s *IntegrationTestSuite) TestCLIMultisignSortSignatures() {
 	multiGeneratedTxFile := testutil.WriteToNewTempFile(s.T(), multiGeneratedTx.String())
 
 	// Sign with account1
-	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 	account1Signature, err := TxSignExec(val1.ClientCtx, account1.GetAddress(), multiGeneratedTxFile.Name(), "--multisig", multisigInfo.GetAddress().String())
 	s.Require().NoError(err)
 
@@ -901,7 +901,7 @@ func (s *IntegrationTestSuite) TestCLIMultisign() {
 	multiGeneratedTxFile := testutil.WriteToNewTempFile(s.T(), multiGeneratedTx.String())
 
 	// Sign with account1
-	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val1.ClientCtx.HomeDir = strings.Replace(val1.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 	account1Signature, err := TxSignExec(val1.ClientCtx, account1.GetAddress(), multiGeneratedTxFile.Name(), "--multisig", multisigInfo.GetAddress().String())
 	s.Require().NoError(err)
 
@@ -971,7 +971,7 @@ func (s *IntegrationTestSuite) TestSignBatchMultisig() {
 
 	// Write the output to disk
 	filename := testutil.WriteToNewTempFile(s.T(), strings.Repeat(generatedStd.String(), 1))
-	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 
 	// sign-batch file
 	res, err := TxSignBatchExec(val.ClientCtx, account1.GetAddress(), filename.Name(), fmt.Sprintf("--%s=%s", flags.FlagChainID, val.ClientCtx.ChainID), "--multisig", multisigInfo.GetAddress().String())
@@ -1036,7 +1036,7 @@ func (s *IntegrationTestSuite) TestMultisignBatch() {
 
 	// Write the output to disk
 	filename := testutil.WriteToNewTempFile(s.T(), strings.Repeat(generatedStd.String(), 3))
-	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "simd", "simcli", 1)
+	val.ClientCtx.HomeDir = strings.Replace(val.ClientCtx.HomeDir, "sedad", "sedacli", 1)
 
 	queryResJSON, err := QueryAccountExec(val.ClientCtx, multisigInfo.GetAddress())
 	s.Require().NoError(err)
@@ -1134,7 +1134,7 @@ func (s *IntegrationTestSuite) TestGetAccountsCmd() {
 
 func TestGetBroadcastCommandOfflineFlag(t *testing.T) {
 	clientCtx := client.Context{}.WithOffline(true)
-	clientCtx = clientCtx.WithTxConfig(simapp.MakeTestEncodingConfig().TxConfig)
+	clientCtx = clientCtx.WithTxConfig(sedaapp.MakeTestEncodingConfig().TxConfig)
 
 	cmd := authcli.GetBroadcastCommand()
 	_ = testutil.ApplyMockIODiscardOutErr(cmd)
@@ -1145,7 +1145,7 @@ func TestGetBroadcastCommandOfflineFlag(t *testing.T) {
 
 func TestGetBroadcastCommandWithoutOfflineFlag(t *testing.T) {
 	clientCtx := client.Context{}
-	txCfg := simapp.MakeTestEncodingConfig().TxConfig
+	txCfg := sedaapp.MakeTestEncodingConfig().TxConfig
 	clientCtx = clientCtx.WithTxConfig(txCfg)
 
 	ctx := context.Background()

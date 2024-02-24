@@ -9,7 +9,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/params/types"
@@ -19,7 +19,7 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	app *simapp.SimApp
+	app *sedaapp.SedaApp
 	ctx sdk.Context
 
 	queryClient proposal.QueryClient
@@ -38,8 +38,8 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 // returns context and app
-func createTestApp(isCheckTx bool) (*simapp.SimApp, sdk.Context) {
-	app := simapp.Setup(isCheckTx)
+func createTestApp(isCheckTx bool) (*sedaapp.SedaApp, sdk.Context) {
+	app := sedaapp.Setup(isCheckTx)
 	ctx := app.BaseApp.NewContext(isCheckTx, tmproto.Header{})
 
 	return app, ctx

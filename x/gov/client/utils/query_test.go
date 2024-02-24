@@ -11,7 +11,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 	"github.com/cosmos/cosmos-sdk/x/gov/client/utils"
@@ -75,7 +75,7 @@ func (mock TxSearchMock) Block(ctx context.Context, height *int64) (*ctypes.Resu
 }
 
 func TestGetPaginatedVotes(t *testing.T) {
-	encCfg := simapp.MakeTestEncodingConfig()
+	encCfg := sedaapp.MakeTestEncodingConfig()
 
 	type testCase struct {
 		description string

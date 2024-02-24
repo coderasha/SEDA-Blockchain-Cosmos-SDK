@@ -9,7 +9,7 @@ import (
 	tmtime "github.com/tendermint/tendermint/types/time"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -20,14 +20,14 @@ var bankSendAuthMsgType = banktypes.SendAuthorization{}.MsgTypeURL()
 type TestSuite struct {
 	suite.Suite
 
-	app         *simapp.SimApp
+	app         *sedaapp.SedaApp
 	ctx         sdk.Context
 	addrs       []sdk.AccAddress
 	queryClient authz.QueryClient
 }
 
 func (s *TestSuite) SetupTest() {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 	now := tmtime.Now()
 	ctx = ctx.WithBlockHeader(tmproto.Header{Time: now})
@@ -39,7 +39,7 @@ func (s *TestSuite) SetupTest() {
 	s.app = app
 	s.ctx = ctx
 	s.queryClient = queryClient
-	s.addrs = simapp.AddTestAddrsIncremental(app, ctx, 3, sdk.NewInt(30000000))
+	s.addrs = sedaapp.AddTestAddrsIncremental(app, ctx, 3, sdk.NewInt(30000000))
 }
 
 func (s *TestSuite) TestKeeper() {
@@ -129,7 +129,7 @@ func (s *TestSuite) TestKeeperFees() {
 	granterAddr := addrs[0]
 	granteeAddr := addrs[1]
 	recipientAddr := addrs[2]
-	s.Require().NoError(simapp.FundAccount(app.BankKeeper, s.ctx, granterAddr, sdk.NewCoins(sdk.NewInt64Coin("steak", 10000))))
+	s.Require().NoError(sedaapp.FundAccount(app.BankKeeper, s.ctx, granterAddr, sdk.NewCoins(sdk.NewInt64Coin("steak", 10000))))
 	now := s.ctx.BlockHeader().Time
 	s.Require().NotNil(now)
 
@@ -204,7 +204,7 @@ func (s *TestSuite) TestDispatchedEvents() {
 	granterAddr := addrs[0]
 	granteeAddr := addrs[1]
 	recipientAddr := addrs[2]
-	require.NoError(simapp.FundAccount(app.BankKeeper, s.ctx, granterAddr, sdk.NewCoins(sdk.NewInt64Coin("steak", 10000))))
+	require.NoError(sedaapp.FundAccount(app.BankKeeper, s.ctx, granterAddr, sdk.NewCoins(sdk.NewInt64Coin("steak", 10000))))
 	now := s.ctx.BlockHeader().Time
 	require.NotNil(now)
 

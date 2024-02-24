@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
+	sedaappparams "github.com/cosmos/cosmos-sdk/sedaapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
@@ -38,31 +38,31 @@ func WeightedOperations(
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgCreateValidator, &weightMsgCreateValidator, nil,
 		func(_ *rand.Rand) {
-			weightMsgCreateValidator = simappparams.DefaultWeightMsgCreateValidator
+			weightMsgCreateValidator = sedaappparams.DefaultWeightMsgCreateValidator
 		},
 	)
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgEditValidator, &weightMsgEditValidator, nil,
 		func(_ *rand.Rand) {
-			weightMsgEditValidator = simappparams.DefaultWeightMsgEditValidator
+			weightMsgEditValidator = sedaappparams.DefaultWeightMsgEditValidator
 		},
 	)
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgDelegate, &weightMsgDelegate, nil,
 		func(_ *rand.Rand) {
-			weightMsgDelegate = simappparams.DefaultWeightMsgDelegate
+			weightMsgDelegate = sedaappparams.DefaultWeightMsgDelegate
 		},
 	)
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgUndelegate, &weightMsgUndelegate, nil,
 		func(_ *rand.Rand) {
-			weightMsgUndelegate = simappparams.DefaultWeightMsgUndelegate
+			weightMsgUndelegate = sedaappparams.DefaultWeightMsgUndelegate
 		},
 	)
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgBeginRedelegate, &weightMsgBeginRedelegate, nil,
 		func(_ *rand.Rand) {
-			weightMsgBeginRedelegate = simappparams.DefaultWeightMsgBeginRedelegate
+			weightMsgBeginRedelegate = sedaappparams.DefaultWeightMsgBeginRedelegate
 		},
 	)
 
@@ -153,7 +153,7 @@ func SimulateMsgCreateValidator(ak types.AccountKeeper, bk types.BankKeeper, k k
 
 		txCtx := simulation.OperationInput{
 			App:           app,
-			TxGen:         simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:         sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -211,7 +211,7 @@ func SimulateMsgEditValidator(ak types.AccountKeeper, bk types.BankKeeper, k kee
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:           sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -277,7 +277,7 @@ func SimulateMsgDelegate(ak types.AccountKeeper, bk types.BankKeeper, k keeper.K
 
 		txCtx := simulation.OperationInput{
 			App:           app,
-			TxGen:         simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:         sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -354,7 +354,7 @@ func SimulateMsgUndelegate(ak types.AccountKeeper, bk types.BankKeeper, k keeper
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:           sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -456,7 +456,7 @@ func SimulateMsgBeginRedelegate(ak types.AccountKeeper, bk types.BankKeeper, k k
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:           sedaappparams.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),

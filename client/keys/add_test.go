@@ -15,7 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	sedaapp "github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -193,7 +193,7 @@ func Test_runAddCmdDryRun(t *testing.T) {
 			kb, err := keyring.New(sdk.KeyringServiceName(), keyring.BackendTest, kbHome, mockIn)
 			require.NoError(t, err)
 
-			appCodec := simapp.MakeTestEncodingConfig().Marshaler
+			appCodec := sedaapp.MakeTestEncodingConfig().Marshaler
 			clientCtx := client.Context{}.
 				WithJSONCodec(appCodec).
 				WithKeyringDir(kbHome).

@@ -228,7 +228,7 @@ func TxEmitter(ctx context.Context, cliCtx client.Context, ehs ...EventHandler) 
 
     // Publish chain events to the pubsub bus
     eg.Go(func() error {
-        return PublishChainTxEvents(ctx, client, bus, simapp.ModuleBasics)
+        return PublishChainTxEvents(ctx, client, bus, sedaapp.ModuleBasics)
     })
 
     // Subscribe to the bus events

@@ -7,14 +7,14 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-func checkValidator(t *testing.T, app *simapp.SimApp, addr sdk.ValAddress, expFound bool) types.Validator {
+func checkValidator(t *testing.T, app *sedaapp.SedaApp, addr sdk.ValAddress, expFound bool) types.Validator {
 	ctxCheck := app.BaseApp.NewContext(true, tmproto.Header{})
 	validator, found := app.StakingKeeper.GetValidator(ctxCheck, addr)
 
@@ -23,7 +23,7 @@ func checkValidator(t *testing.T, app *simapp.SimApp, addr sdk.ValAddress, expFo
 }
 
 func checkDelegation(
-	t *testing.T, app *simapp.SimApp, delegatorAddr sdk.AccAddress,
+	t *testing.T, app *sedaapp.SedaApp, delegatorAddr sdk.AccAddress,
 	validatorAddr sdk.ValAddress, expFound bool, expShares sdk.Dec,
 ) {
 
@@ -59,9 +59,9 @@ func TestStakingMsgs(t *testing.T) {
 		},
 	}
 
-	app := simapp.SetupWithGenesisAccounts(accs, balances...)
-	simapp.CheckBalance(t, app, addr1, sdk.Coins{genCoin})
-	simapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin})
+	app := sedaapp.SetupWithGenesisAccounts(accs, balances...)
+	sedaapp.CheckBalance(t, app, addr1, sdk.Coins{genCoin})
+	sedaapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin})
 
 	// create validator
 	description := types.NewDescription("foo_moniker", "", "", "", "")
@@ -71,10 +71,10 @@ func TestStakingMsgs(t *testing.T) {
 	require.NoError(t, err)
 
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
-	txGen := simapp.MakeTestEncodingConfig().TxConfig
-	_, _, err = simapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{createValidatorMsg}, "", []uint64{0}, []uint64{0}, true, true, priv1)
+	txGen := sedaapp.MakeTestEncodingConfig().TxConfig
+	_, _, err = sedaapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{createValidatorMsg}, "", []uint64{0}, []uint64{0}, true, true, priv1)
 	require.NoError(t, err)
-	simapp.CheckBalance(t, app, addr1, sdk.Coins{genCoin.Sub(bondCoin)})
+	sedaapp.CheckBalance(t, app, addr1, sdk.Coins{genCoin.Sub(bondCoin)})
 
 	header = tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.BeginBlock(abci.RequestBeginBlock{Header: header})
@@ -92,32 +92,32 @@ func TestStakingMsgs(t *testing.T) {
 	editValidatorMsg := types.NewMsgEditValidator(sdk.ValAddress(addr1), description, nil, nil)
 
 	header = tmproto.Header{Height: app.LastBlockHeight() + 1}
-	_, _, err = simapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{editValidatorMsg}, "", []uint64{0}, []uint64{1}, true, true, priv1)
+	_, _, err = sedaapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{editValidatorMsg}, "", []uint64{0}, []uint64{1}, true, true, priv1)
 	require.NoError(t, err)
 
 	validator = checkValidator(t, app, sdk.ValAddress(addr1), true)
 	require.Equal(t, description, validator.Description)
 
 	// delegate
-	simapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin})
+	sedaapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin})
 	delegateMsg := types.NewMsgDelegate(addr2, sdk.ValAddress(addr1), bondCoin)
 
 	header = tmproto.Header{Height: app.LastBlockHeight() + 1}
-	_, _, err = simapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{delegateMsg}, "", []uint64{1}, []uint64{0}, true, true, priv2)
+	_, _, err = sedaapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{delegateMsg}, "", []uint64{1}, []uint64{0}, true, true, priv2)
 	require.NoError(t, err)
 
-	simapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin.Sub(bondCoin)})
+	sedaapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin.Sub(bondCoin)})
 	checkDelegation(t, app, addr2, sdk.ValAddress(addr1), true, bondTokens.ToDec())
 
 	// begin unbonding
 	beginUnbondingMsg := types.NewMsgUndelegate(addr2, sdk.ValAddress(addr1), bondCoin)
 	header = tmproto.Header{Height: app.LastBlockHeight() + 1}
-	_, _, err = simapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{beginUnbondingMsg}, "", []uint64{1}, []uint64{1}, true, true, priv2)
+	_, _, err = sedaapp.SignCheckDeliver(t, txGen, app.BaseApp, header, []sdk.Msg{beginUnbondingMsg}, "", []uint64{1}, []uint64{1}, true, true, priv2)
 	require.NoError(t, err)
 
 	// delegation should exist anymore
 	checkDelegation(t, app, addr2, sdk.ValAddress(addr1), false, sdk.Dec{})
 
 	// balance should be the same because bonding not yet complete
-	simapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin.Sub(bondCoin)})
+	sedaapp.CheckBalance(t, app, addr2, sdk.Coins{genCoin.Sub(bondCoin)})
 }

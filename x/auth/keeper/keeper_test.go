@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -27,7 +27,7 @@ var (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	app *simapp.SimApp
+	app *sedaapp.SedaApp
 	ctx sdk.Context
 
 	queryClient types.QueryClient
@@ -122,14 +122,14 @@ func TestSupply_ValidatePermissions(t *testing.T) {
 	app, _ := createTestApp(true)
 
 	// add module accounts to supply keeper
-	maccPerms := simapp.GetMaccPerms()
+	maccPerms := sedaapp.GetMaccPerms()
 	maccPerms[holder] = nil
 	maccPerms[types.Burner] = []string{types.Burner}
 	maccPerms[types.Minter] = []string{types.Minter}
 	maccPerms[multiPerm] = []string{types.Burner, types.Minter, types.Staking}
 	maccPerms[randomPerm] = []string{"random"}
 
-	cdc := simapp.MakeTestEncodingConfig().Marshaler
+	cdc := sedaapp.MakeTestEncodingConfig().Marshaler
 	keeper := keeper.NewAccountKeeper(
 		cdc, app.GetKey(types.StoreKey), app.GetSubspace(types.ModuleName),
 		types.ProtoBaseAccount, maccPerms,

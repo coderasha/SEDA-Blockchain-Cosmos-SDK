@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
@@ -14,12 +14,12 @@ import (
 )
 
 func TestCalculateRewardsBasic(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 
 	// create validator with 50% commission
 	tstaking.Commission = stakingtypes.NewCommissionRates(sdk.NewDecWithPrec(5, 1), sdk.NewDecWithPrec(5, 1), sdk.NewDec(0))
@@ -68,11 +68,11 @@ func TestCalculateRewardsBasic(t *testing.T) {
 }
 
 func TestCalculateRewardsAfterSlash(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 
 	// create validator with 50% commission
@@ -131,12 +131,12 @@ func TestCalculateRewardsAfterSlash(t *testing.T) {
 }
 
 func TestCalculateRewardsAfterManySlashes(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 
 	// create validator with 50% commission
 	valPower := int64(100)
@@ -206,12 +206,12 @@ func TestCalculateRewardsAfterManySlashes(t *testing.T) {
 }
 
 func TestCalculateRewardsMultiDelegator(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(100000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 
 	// create validator with 50% commission
 	tstaking.Commission = stakingtypes.NewCommissionRates(sdk.NewDecWithPrec(5, 1), sdk.NewDecWithPrec(5, 1), sdk.NewDec(0))
@@ -269,18 +269,18 @@ func TestCalculateRewardsMultiDelegator(t *testing.T) {
 }
 
 func TestWithdrawDelegationRewardsBasic(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	balancePower := int64(1000)
 	balanceTokens := app.StakingKeeper.TokensFromConsensusPower(ctx, balancePower)
-	addr := simapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(1000000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(1000000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 
 	// set module account coins
 	distrAcc := app.DistrKeeper.GetDistributionAccount(ctx)
-	require.NoError(t, simapp.FundModuleAccount(app.BankKeeper, ctx, distrAcc.GetName(), sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, balanceTokens))))
+	require.NoError(t, sedaapp.FundModuleAccount(app.BankKeeper, ctx, distrAcc.GetName(), sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, balanceTokens))))
 	app.AccountKeeper.SetModuleAccount(ctx, distrAcc)
 
 	// create validator with 50% commission
@@ -340,11 +340,11 @@ func TestWithdrawDelegationRewardsBasic(t *testing.T) {
 }
 
 func TestCalculateRewardsAfterManySlashesInSameBlock(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
-	addr := simapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(1000000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 1, sdk.NewInt(1000000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 
 	// create validator with 50% commission
@@ -408,12 +408,12 @@ func TestCalculateRewardsAfterManySlashesInSameBlock(t *testing.T) {
 }
 
 func TestCalculateRewardsMultiDelegatorMultiSlash(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 
 	// create validator with 50% commission
 	tstaking.Commission = stakingtypes.NewCommissionRates(sdk.NewDecWithPrec(5, 1), sdk.NewDecWithPrec(5, 1), sdk.NewDec(0))
@@ -482,17 +482,17 @@ func TestCalculateRewardsMultiDelegatorMultiSlash(t *testing.T) {
 }
 
 func TestCalculateRewardsMultiDelegatorMultWithdraw(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
-	addr := simapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
-	valAddrs := simapp.ConvertAddrsToValAddrs(addr)
+	addr := sedaapp.AddTestAddrs(app, ctx, 2, sdk.NewInt(1000000000))
+	valAddrs := sedaapp.ConvertAddrsToValAddrs(addr)
 	initial := int64(20)
 
 	// set module account coins
 	distrAcc := app.DistrKeeper.GetDistributionAccount(ctx)
-	require.NoError(t, simapp.FundModuleAccount(app.BankKeeper, ctx, distrAcc.GetName(), sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000)))))
+	require.NoError(t, sedaapp.FundModuleAccount(app.BankKeeper, ctx, distrAcc.GetName(), sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000)))))
 	app.AccountKeeper.SetModuleAccount(ctx, distrAcc)
 
 	tokens := sdk.DecCoins{sdk.NewDecCoinFromDec(sdk.DefaultBondDenom, sdk.NewDec(initial))}

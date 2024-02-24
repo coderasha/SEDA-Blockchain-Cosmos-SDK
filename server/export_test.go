@@ -23,9 +23,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 )
@@ -47,13 +47,13 @@ func TestExportCmd_ConsensusParams(t *testing.T) {
 	}
 
 	require.Equal(t, genDoc.ConsensusParams.Block.TimeIotaMs, exportedGenDoc.ConsensusParams.Block.TimeIotaMs)
-	require.Equal(t, simapp.DefaultConsensusParams.Block.MaxBytes, exportedGenDoc.ConsensusParams.Block.MaxBytes)
-	require.Equal(t, simapp.DefaultConsensusParams.Block.MaxGas, exportedGenDoc.ConsensusParams.Block.MaxGas)
+	require.Equal(t, sedaapp.DefaultConsensusParams.Block.MaxBytes, exportedGenDoc.ConsensusParams.Block.MaxBytes)
+	require.Equal(t, sedaapp.DefaultConsensusParams.Block.MaxGas, exportedGenDoc.ConsensusParams.Block.MaxGas)
 
-	require.Equal(t, simapp.DefaultConsensusParams.Evidence.MaxAgeDuration, exportedGenDoc.ConsensusParams.Evidence.MaxAgeDuration)
-	require.Equal(t, simapp.DefaultConsensusParams.Evidence.MaxAgeNumBlocks, exportedGenDoc.ConsensusParams.Evidence.MaxAgeNumBlocks)
+	require.Equal(t, sedaapp.DefaultConsensusParams.Evidence.MaxAgeDuration, exportedGenDoc.ConsensusParams.Evidence.MaxAgeDuration)
+	require.Equal(t, sedaapp.DefaultConsensusParams.Evidence.MaxAgeNumBlocks, exportedGenDoc.ConsensusParams.Evidence.MaxAgeNumBlocks)
 
-	require.Equal(t, simapp.DefaultConsensusParams.Validator.PubKeyTypes, exportedGenDoc.ConsensusParams.Validator.PubKeyTypes)
+	require.Equal(t, sedaapp.DefaultConsensusParams.Validator.PubKeyTypes, exportedGenDoc.ConsensusParams.Validator.PubKeyTypes)
 }
 
 func TestExportCmd_HomeDir(t *testing.T) {
@@ -122,15 +122,15 @@ func TestExportCmd_Height(t *testing.T) {
 
 }
 
-func setupApp(t *testing.T, tempDir string) (*simapp.SimApp, context.Context, *tmtypes.GenesisDoc, *cobra.Command) {
+func setupApp(t *testing.T, tempDir string) (*sedaapp.SedaApp, context.Context, *tmtypes.GenesisDoc, *cobra.Command) {
 	if err := createConfigFolder(tempDir); err != nil {
 		t.Fatalf("error creating config folder: %s", err)
 	}
 
 	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 	db := dbm.NewMemDB()
-	encCfg := simapp.MakeTestEncodingConfig()
-	app := simapp.NewSimApp(logger, db, nil, true, map[int64]bool{}, tempDir, 0, encCfg, simapp.EmptyAppOptions{})
+	encCfg := sedaapp.MakeTestEncodingConfig()
+	app := sedaapp.NewSedaApp(logger, db, nil, true, map[int64]bool{}, tempDir, 0, encCfg, sedaapp.EmptyAppOptions{})
 
 	serverCtx := server.NewDefaultContext()
 	serverCtx.Config.RootDir = tempDir
@@ -142,7 +142,7 @@ func setupApp(t *testing.T, tempDir string) (*simapp.SimApp, context.Context, *t
 	app.InitChain(
 		abci.RequestInitChain{
 			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simapp.DefaultConsensusParams,
+			ConsensusParams: sedaapp.DefaultConsensusParams,
 			AppStateBytes:   genDoc.AppState,
 		},
 	)
@@ -150,20 +150,20 @@ func setupApp(t *testing.T, tempDir string) (*simapp.SimApp, context.Context, *t
 
 	cmd := server.ExportCmd(
 		func(_ log.Logger, _ dbm.DB, _ io.Writer, height int64, forZeroHeight bool, jailAllowedAddrs []string, appOptons types.AppOptions) (types.ExportedApp, error) {
-			encCfg := simapp.MakeTestEncodingConfig()
+			encCfg := sedaapp.MakeTestEncodingConfig()
 
-			var simApp *simapp.SimApp
+			var sedaApp *sedaapp.SedaApp
 			if height != -1 {
-				simApp = simapp.NewSimApp(logger, db, nil, false, map[int64]bool{}, "", 0, encCfg, appOptons)
+				sedaApp = sedaapp.NewSedaApp(logger, db, nil, false, map[int64]bool{}, "", 0, encCfg, appOptons)
 
-				if err := simApp.LoadHeight(height); err != nil {
+				if err := sedaApp.LoadHeight(height); err != nil {
 					return types.ExportedApp{}, err
 				}
 			} else {
-				simApp = simapp.NewSimApp(logger, db, nil, true, map[int64]bool{}, "", 0, encCfg, appOptons)
+				sedaApp = sedaapp.NewSedaApp(logger, db, nil, true, map[int64]bool{}, "", 0, encCfg, appOptons)
 			}
 
-			return simApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
+			return sedaApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs)
 		}, tempDir)
 
 	ctx := context.Background()
@@ -178,7 +178,7 @@ func createConfigFolder(dir string) error {
 }
 
 func newDefaultGenesisDoc(cdc codec.Codec) *tmtypes.GenesisDoc {
-	genesisState := simapp.NewDefaultGenesisState(cdc)
+	genesisState := sedaapp.NewDefaultGenesisState(cdc)
 
 	stateBytes, err := json.MarshalIndent(genesisState, "", "  ")
 	if err != nil {

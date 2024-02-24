@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
@@ -23,10 +23,10 @@ import (
 
 func TestCannotUnjailUnlessJailed(t *testing.T) {
 	// initial setup
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
-	pks := simapp.CreateTestPubKeys(1)
-	simapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
+	pks := sedaapp.CreateTestPubKeys(1)
+	sedaapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 	slh := slashing.NewHandler(app.SlashingKeeper)
@@ -49,10 +49,10 @@ func TestCannotUnjailUnlessJailed(t *testing.T) {
 
 func TestCannotUnjailUnlessMeetMinSelfDelegation(t *testing.T) {
 	// initial setup
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
-	pks := simapp.CreateTestPubKeys(1)
-	simapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
+	pks := sedaapp.CreateTestPubKeys(1)
+	sedaapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
 	slh := slashing.NewHandler(app.SlashingKeeper)
@@ -80,11 +80,11 @@ func TestCannotUnjailUnlessMeetMinSelfDelegation(t *testing.T) {
 
 func TestJailedValidatorDelegations(t *testing.T) {
 	// initial setup
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{Time: time.Unix(0, 0)})
-	pks := simapp.CreateTestPubKeys(3)
+	pks := sedaapp.CreateTestPubKeys(3)
 
-	simapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 20))
+	sedaapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 20))
 	app.SlashingKeeper.SetParams(ctx, testslashing.TestParams())
 
 	tstaking := teststaking.NewHelper(t, ctx, app.StakingKeeper)
@@ -142,10 +142,10 @@ func TestInvalidMsg(t *testing.T) {
 // unrevocation, starting height reset, and revocation again
 func TestHandleAbsentValidator(t *testing.T) {
 	// initial setup
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{Time: time.Unix(0, 0)})
-	pks := simapp.CreateTestPubKeys(1)
-	simapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
+	pks := sedaapp.CreateTestPubKeys(1)
+	sedaapp.AddTestAddrsFromPubKeys(app, ctx, pks, app.StakingKeeper.TokensFromConsensusPower(ctx, 200))
 	app.SlashingKeeper.SetParams(ctx, testslashing.TestParams())
 
 	power := int64(100)

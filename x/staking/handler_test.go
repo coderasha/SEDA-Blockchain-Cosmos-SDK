@@ -17,7 +17,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
@@ -26,8 +26,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-func bootstrapHandlerGenesisTest(t *testing.T, power int64, numAddrs int, accAmount sdk.Int) (*simapp.SimApp, sdk.Context, []sdk.AccAddress, []sdk.ValAddress) {
-	_, app, ctx := getBaseSimappWithCustomKeeper()
+func bootstrapHandlerGenesisTest(t *testing.T, power int64, numAddrs int, accAmount sdk.Int) (*sedaapp.SedaApp, sdk.Context, []sdk.AccAddress, []sdk.ValAddress) {
+	_, app, ctx := getBaseSedaappWithCustomKeeper()
 
 	addrDels, addrVals := generateAddresses(app, ctx, numAddrs, accAmount)
 
@@ -38,7 +38,7 @@ func bootstrapHandlerGenesisTest(t *testing.T, power int64, numAddrs int, accAmo
 
 	// set non bonded pool balance
 	app.AccountKeeper.SetModuleAccount(ctx, notBondedPool)
-	require.NoError(t, simapp.FundModuleAccount(app.BankKeeper, ctx, notBondedPool.GetName(), totalSupply))
+	require.NoError(t, sedaapp.FundModuleAccount(app.BankKeeper, ctx, notBondedPool.GetName(), totalSupply))
 	return app, ctx, addrDels, addrVals
 }
 

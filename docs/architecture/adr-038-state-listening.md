@@ -541,15 +541,15 @@ func FileStreamingConstructor(opts servertypes.AppOptions, keys []sdk.StoreKey) 
 
 #### Example configuration
 
-As a demonstration, we will implement the state watching features as part of SimApp.
-For example, the below is a very rudimentary integration of the state listening features into the SimApp `AppCreator` function:
+As a demonstration, we will implement the state watching features as part of SedaApp.
+For example, the below is a very rudimentary integration of the state listening features into the SedaApp `AppCreator` function:
 
 ```go
-func NewSimApp(
+func NewSedaApp(
 	logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, skipUpgradeHeights map[int64]bool,
-	homePath string, invCheckPeriod uint, encodingConfig simappparams.EncodingConfig,
+	homePath string, invCheckPeriod uint, encodingConfig sedaappparams.EncodingConfig,
 	appOpts servertypes.AppOptions, baseAppOptions ...func(*baseapp.BaseApp),
-) *SimApp {
+) *SedaApp {
 
 	...
 

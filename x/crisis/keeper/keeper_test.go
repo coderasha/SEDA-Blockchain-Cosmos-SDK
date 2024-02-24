@@ -7,32 +7,32 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/sedaapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestLogger(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 
 	ctx := app.NewContext(true, tmproto.Header{})
 	require.Equal(t, ctx.Logger(), app.CrisisKeeper.Logger(ctx))
 }
 
 func TestInvariants(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	app.Commit()
 	app.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{Height: app.LastBlockHeight() + 1}})
 
 	require.Equal(t, app.CrisisKeeper.InvCheckPeriod(), uint(5))
 
-	// SimApp has 11 registered invariants
+	// SedaApp has 11 registered invariants
 	orgInvRoutes := app.CrisisKeeper.Routes()
 	app.CrisisKeeper.RegisterRoute("testModule", "testRoute", func(sdk.Context) (string, bool) { return "", false })
 	require.Equal(t, len(app.CrisisKeeper.Routes()), len(orgInvRoutes)+1)
 }
 
 func TestAssertInvariants(t *testing.T) {
-	app := simapp.Setup(false)
+	app := sedaapp.Setup(false)
 	app.Commit()
 	app.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{Height: app.LastBlockHeight() + 1}})
 

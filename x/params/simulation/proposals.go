@@ -1,7 +1,7 @@
 package simulation
 
 import (
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
+	sedaappparams "github.com/cosmos/cosmos-sdk/sedaapp/params"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 )
@@ -14,7 +14,7 @@ func ProposalContents(paramChanges []simtypes.ParamChange) []simtypes.WeightedPr
 	return []simtypes.WeightedProposalContent{
 		simulation.NewWeightedProposalContent(
 			OpWeightSubmitParamChangeProposal,
-			simappparams.DefaultWeightParamChangeProposal,
+			sedaappparams.DefaultWeightParamChangeProposal,
 			SimulateParamChangeProposalContent(paramChanges),
 		),
 	}
