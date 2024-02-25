@@ -43,7 +43,7 @@ func PubkeyCmd() *cobra.Command {
 		Long: fmt.Sprintf(`Decode a pubkey from proto JSON and display it's address.
 
 Example:
-$ %s debug pubkey '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"AurroA7jvfPd1AadmmOvWM2rJSwipXfRf8yD6pLbA2DJ"}'
+$ %s debug pubkey '{"@type":"/seda.crypto.secp256k1.PubKey","key":"AurroA7jvfPd1AadmmOvWM2rJSwipXfRf8yD6pLbA2DJ"}'
 			`, version.AppName),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -66,7 +66,7 @@ func AddrCmd() *cobra.Command {
 		Long: fmt.Sprintf(`Convert an address between hex encoding and bech32.
 
 Example:
-$ %s debug addr cosmos1e0jnq2sun3dzjh8p2xq95kk0expwmd7shwjpfg
+$ %s debug addr seda1e0jnq2sun3dzjh8p2xq95kk0expwmd7shwjpfg
 			`, version.AppName),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

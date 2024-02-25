@@ -117,12 +117,12 @@ func (m *PrivKey) GetKey() []byte {
 }
 
 func init() {
-	proto.RegisterType((*PubKey)(nil), "cosmos.crypto.secp256k1.PubKey")
-	proto.RegisterType((*PrivKey)(nil), "cosmos.crypto.secp256k1.PrivKey")
+	proto.RegisterType((*PubKey)(nil), "seda.crypto.secp256k1.PubKey")
+	proto.RegisterType((*PrivKey)(nil), "seda.crypto.secp256k1.PrivKey")
 }
 
 func init() {
-	proto.RegisterFile("cosmos/crypto/secp256k1/keys.proto", fileDescriptor_e0835e68ebdcb224)
+	proto.RegisterFile("seda/crypto/secp256k1/keys.proto", fileDescriptor_e0835e68ebdcb224)
 }
 
 var fileDescriptor_e0835e68ebdcb224 = []byte{
