@@ -11,7 +11,7 @@ require (
 	cosmossdk.io/depinject v1.0.0-alpha.4
 	cosmossdk.io/errors v1.0.1 // indirect
 	cosmossdk.io/log v1.3.1
-	cosmossdk.io/math v1.2.0
+	cosmossdk.io/math v1.4.0
 	cosmossdk.io/simapp v0.0.0-20230309163709-87da587416ba
 	cosmossdk.io/store v1.0.2
 	cosmossdk.io/x/evidence v0.0.0-20230613133644-0a778132a60f
@@ -28,7 +28,7 @@ require (
 	github.com/cosmos/gogoproto v1.4.11
 	github.com/golang/mock v1.6.0
 	github.com/spf13/cobra v1.8.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.62.0
 	google.golang.org/protobuf v1.32.0
 	gotest.tools/v3 v3.5.1
