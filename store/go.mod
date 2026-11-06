@@ -12,7 +12,7 @@ require (
 	github.com/cosmos/gogoproto v1.4.11
 	github.com/cosmos/iavl v1.0.0-beta.1.0.20240125174944-11ba4961dae9
 	github.com/cosmos/ics23/go v0.10.0
-	github.com/google/btree v1.1.2
+	github.com/google/btree v1.1.3
 	github.com/hashicorp/go-metrics v0.5.3
 	github.com/linxGnu/grocksdb v1.8.12
 	github.com/mattn/go-sqlite3 v1.14.22
